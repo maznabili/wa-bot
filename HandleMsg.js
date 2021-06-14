@@ -237,7 +237,7 @@ module.exports = HandleMsg = async (aruga, message) => {
         const uaOverride = process.env.UserAgent
         const url = args.length !== 0 ? args[0] : ''
         const isQuotedImage = quotedMsg && quotedMsg.type === 'image'
-        const isQuotedVideo = quotedMsg && quotedMsg.type === 'video'
+        const isQuotedVideo = quotedMsg && quotedMsg.type === 'video/mp4'
 		const isQuotedGif = quotedMsg && quotedMsg.type === 'gif'
 		const isQuotedAudio = quotedMsg && quotedMsg.type === 'audio'
 		const isQuotedSticker = quotedMsg && quotedMsg.type === 'sticker'
@@ -981,15 +981,6 @@ module.exports = HandleMsg = async (aruga, message) => {
 			aruga.sendStickerfromUrl(from, res.data.url)
                 });
                 break
-                case prefix+'stikerpatrick':
-                case prefix+'stickerpatrick':
-                case prefix+'stickpatrick':
-                case prefix+'stikpatrick':
-                case prefix+'stickpat':
-                case prefix+'stikpat':
-                aruga.reply(from, mess.wait, id)
-                    aruga.sendImageAsSticker(from, `http://lolhuman.herokuapp.com/api/sticker/patrick?apikey=${lolhuman}`, StickerMetadata)
-                    break
                case prefix+'rhentai':
                 if (!isPrem) return aruga.reply(from, mess.prem, id)
                aruga.reply(from, mess.wait, id);
@@ -3499,41 +3490,46 @@ case prefix+'ytsearch':
             aruga.reply(from, 'Ada yang Error!', id)
         })
     break
-	case prefix+'tomp3': // by: Piyobot
-                if ((isMedia || isQuotedVideo)) {
-                    await aruga.reply(from, mess.wait, id)
-                    const encryptMedia = isQuotedVideo ? quotedMsg : message
-                    const _mimetype = isQuotedVideo ? quotedMsg.mimetype : mimetype
-                    console.log(color('[WAPI]', 'green'), 'Downloading and decrypt media...')
-                    const mediaData = await decryptMedia(encryptMedia, uaOverride)
-                    const temp = './temp'
-                    const name = new Date() * 1
-                    const fileInputPath = path.join(temp, 'video', `${name}.${_mimetype.replace(/.+\//, '')}`)
-                    const fileOutputPath = path.join(temp, 'audio', `${name}.mp3`)
-                    fs.writeFile(fileInputPath, mediaData, (err) => {
-                        if (err) return console.error(err)
-                        ffmpeg(fileInputPath)
-                            .format('mp3')
-                            .on('start', (commandLine) => {
-                                //console.log(color('[FFmpeg]', 'green'), commandLine) Nyepam su
-                            })
-                            .on('progress', (progress) => {
-                                //console.log(color('[FFmpeg]', 'green'), progress) Nyepam ugha
-                            })
-                            .on('end', async () => {
-                                console.log(color('[FFmpeg]', 'green'), 'Processing finished!')
-                                await aruga.sendFile(from, fileOutputPath, 'audio.mp3', '', id)
-                                setTimeout(() => {
-                                    fs.unlinkSync(fileInputPath)
-                                    fs.unlinkSync(fileOutputPath)
-                                }, 30000)
-                            })
-                            .save(fileOutputPath)
+	/*
+	case prefix+'tomp3':
+	   if ((isMedia || isQuotedVideo || isQuotedFile)) {
+            aruga.reply(from, mess.wait, id)
+            const encryptMedia = isQuotedVideo || isQuotedFile ? quotedMsg : message
+            const _mimetype = isQuotedVideo || isQuotedFile ? quotedMsg.mimetype : mimetype
+            console.log(color('[WAPI]', 'green'), 'Downloading and decrypt media...')
+            const mediaData = await decryptMedia(encryptMedia)
+            let temp = './temp'
+            let name = new Date() * 1
+            let fileInputPath = path.join(temp, 'video', `${name}.${_mimetype.replace(/.+\//, '')}`)
+            let fileOutputPath = path.join(temp, 'audio', `${name}.mp3`)
+            console.log(color('[fs]', 'green'), `Downloading media into '${fileInputPath}'`)
+            fs.writeFile(fileInputPath, mediaData, err => {
+                if (err) return aruga.reply(from, 'Ada yang error saat menulis file\n\n' + err, id)
+                ffmpeg(fileInputPath)
+                    .format('mp3')
+                    .on('start', function (commandLine) {
+                        console.log(color('[FFmpeg]', 'green'), commandLine)
                     })
-                } else {
-                    await aruga.reply(from, `Reply/post videonya dengan caption ${prefix}tomp3`, id)
-                }
-            break
+                    .on('progress', function (progress) {
+                        console.log(color('[FFmpeg]', 'green'), progress)
+                    })
+                    .on('end', function () {
+                        console.log(color('[FFmpeg]', 'green'), 'Processing finished!')
+                        aruga.sendFile(from, fileOutputPath, 'audio.mp3', '', id)
+                        setTimeout(() => {
+                            try {
+                                fs.unlinkSync(fileInputPath)
+                                fs.unlinkSync(fileOutputPath)
+                            } catch (e) {
+                                console.log(color('[ERROR]', 'red'), e)
+                            }
+                        }, 30000)
+                    })
+                    .save(fileOutputPath)
+            })
+        }
+    break
+	*/
       	case prefix+'motivasi':
             fetch('https://raw.githubusercontent.com/AlvioAdjiJanuar/motivasi/main/motivasi.txt')
             .then(res => res.text())
@@ -3772,7 +3768,7 @@ case prefix+'ytsearch':
             break
         case prefix+'sreddit':
             if (args.length == 0) return aruga.reply(from, `Untuk mencari gambar dari sub reddit\nketik: ${prefix}sreddit [search]\ncontoh: ${prefix}sreddit naruto`, id)
-	    if (!isOwnerB) return aruga.reply(from, mess.prem, id)
+	    if (!isPrem) return aruga.reply(from, mess.prem, id)
             const carireddit = body.slice(9)
             const hasilreddit = await images.sreddit(carireddit)
             await aruga.sendFileFromUrl(from, hasilreddit, '', '', id)
@@ -4328,19 +4324,6 @@ console.log(err)
 							aruga.reply(from, err.message, id)
 						})
                         break
-            case prefix+'cersexsearch':
-            case prefix+'carisex':
-            if (args.length == 0) return aruga.reply(from, `Cari judul apa?`, id)
-            fetchJson(`https://h4ck3rs404-api.herokuapp.com/api/cersex?q=${args}&apikey=${hackapi}`)
-            .then(async(res) => {
-                if(res.result.status == false) return aruga.reply(from, res.result.error, id)
-                const cersex2 = `Title: ${res.result.post_title}\nComments: ${res.result.comments}\nUploaded: ${res.result.date}\nUrl: ${res.result.post_url}\nStory: ${res.result.post_message}`
-                aruga.sendFileFromUrl(from, res.result.thumb, 'image.jpg', cersex2, id)
-            })
-            .catch(err => {
-                console.log(err)
-                aruga.reply(from, res.data.message, id)
-            })
 		case prefix+'trendingtwit':
                     case prefix+'trendtwit':
                         await aruga.reply(from, mess.wait, id)
