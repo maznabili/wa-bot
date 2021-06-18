@@ -29,7 +29,7 @@ const start = async (aruga = new aruga()) => {
             left(aruga, heuh)
             }))
 
-    aruga.onMessage((message) => {
+     aruga.onMessage((message) => {
         HandleMsg(aruga, message)
     })
 
@@ -42,9 +42,7 @@ const start = async (aruga = new aruga()) => {
         })
     })
 
-    aruga.onAnyMessage((anal) => { 
-        messageLog(anal.fromMe, anal.type)
-    })
+    aruga.onAnyMessage((fn) => messageLog(fn.fromMe, fn.type))
 }
 create(options(start))
     .then((aruga) => start(aruga))
