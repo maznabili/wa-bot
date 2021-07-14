@@ -106,6 +106,8 @@ let {
 	hackapi,
 	fahmiapi,
 	lolhuman,
+	dapuhyapi,
+	paiskey,
 	leysapi,
 	apikeyvinz, //IF YOU HAVE THIS APIKEY, YOU CAN CUSTOM IT!
 	authorstc,
@@ -693,21 +695,21 @@ module.exports = HandleMsg = async (aruga, message) => {
         case prefix+'p':
 		case prefix+'start':
         case prefix+'menu':
-            const test0 = sender.id
+			const sendmes = sender.id
+			const profilepic = await aruga.getProfilePicFromServer(sendmes)
 			const jame = moment(t * 1000).format('HH:mm:ss')
-            const nyoba2 = await aruga.getProfilePicFromServer(test0)
-            if (nyoba2 == undefined) {
-                var php2 = 'https://i.ibb.co/PNR9rT3/IMG-20210412-WA0036.jpg'
-                } else {
-                var php2 = nyoba2
-                }
-            await aruga.sendFileFromUrl(from, php2, 'image.jpg', menuId.help(prefix, jame, betime, prem, blockNumber, banned, cts, waver), id)
+			if (profilepic == undefined) {
+                var picts = 'https://i.ibb.co/2NRpS3P/2.jpg'
+			} else {
+				var picts = profilepic
+			}
+            aruga.sendFileFromUrl(from, picts, 'image.jpg', menuId.help(prefix, jame, betime, prem, blockNumber, banned, cts, waver), id)
             .then(() => ((isGroupMsg) && (isGroupAdmins)) ? aruga.sendText(from, `Menu Admin Grup: *${prefix}menuadmin*`) : null)
             break
         case prefix+'menuadmin':
             if (!isGroupMsg) return aruga.reply(from, 'Maaf, perintah ini hanya dapat dipakai didalam grup!', id)
             if (!isGroupAdmins) return aruga.reply(from, 'Gagal, inget lu itu Member bukan Admin', id)
-            const php4 = 'https://i.ibb.co/SfPCmsZ/65307459-647461459071676-8817651150049313976-n.jpg'
+            const php4 = 'https://i.ibb.co/mHPkCRh/1.jpg'
             await aruga.sendFileFromUrl(from, php4,'image.jpg', menuId.admin(prefix), id)
             break
 			case prefix+'kodebahasa':
@@ -2779,37 +2781,23 @@ break
 									aruga.reply(from, 'Error bang', id)
 								})
 								break
+								case prefix+'asupanukhty':
+								aruga.reply(from, mess.wait, id)
+								await aruga.sendFileFromUrl(from, `https://dapuhy-api.herokuapp.com/api/asupan/asupanukhty?apikey=${dapuhyapi}`, 'vid.mp4', '', id)
+								break
 								case prefix+'asupan3':
 								aruga.reply(from, mess.wait, id)
-								await aruga.sendFileFromUrl(from, `https://lindow-api.herokuapp.com/api/asupan?&apikey=${lindowapi}`, 'asupan.mp4', '', id)
+								await aruga.sendFileFromUrl(from, `https://dapuhy-api.herokuapp.com/api/asupan/asupanbocil?apikey=${dapuhyapi}`, 'asupan.mp4', '', id)
 								break
 								case prefix+'asupan2':
 								aruga.reply(from, mess.wait, id)
-								// axios.get(`http://lolhuman.herokuapp.com/api/asupan?apikey=${lolhuman}`)
-								axios.get(`http://leyscoders-api.herokuapp.com/api/asupan?apikey=${leysapi}`)
-								.then(async(res) => {
-									await aruga.sendFileFromUrl(from, res.data.result, 'asupan.mp4', 'neh asupan random', id)
-									.catch(() => {
-										aruga.reply(from, 'Lagi error', id)
-									})
-								})
-								.catch(err => {
-									console.log(err)
-									aruga.reply(from, 'Terjadi kesalahan, silahkan coba lagi nanti', id)
-								})
+								await aruga.sendFileFromUrl(from, `https://dapuhy-api.herokuapp.com/api/asupan/asupansantuy?apikey=${dapuhyapi}`, 'vid.mp4', '', id)
 								break
 								case prefix+'asupan':
 								aruga.reply(from, mess.wait, id)
-								axios.get(`https://onlydevcity.herokuapp.com/api/asupan?apikey=${onlydev}`)
-								.then(async(res) => {
-									aruga.sendFileFromUrl(from, res.data.result.url, 'asupan.mp4', 'nihh asupan random', id)
-								})
-								.catch((err) => {
-									console.log(err)
-									aruga.reply(from, 'Error, mungkin server api sedang down!', id)
-								})
+								await aruga.sendFileFromUrl(from, `https://dapuhy-api.herokuapp.com/api/asupan/asupan?apikey=${dapuhyapi}`, 'vid.mp4', '', id)
 								break
-								case prefix+'ranal':
+								/*case prefix+'ranal':
 								aruga.reply(from, mess.wait, id)
 								axios.get(`https://onlydevcity.herokuapp.com/api/asupanrana?apikey=${onlydev}`)
 								.then(async(res) => {
@@ -2851,23 +2839,13 @@ break
 									console.log(err)
 									aruga.reply(from, 'Errorrrrrr', id)
 								})
-								break
-								case prefix+'gheanaila':
+								break*/
+								case prefix+'gheayoubi':
 								case prefix+'ghea':
 								aruga.reply(from, mess.wait, id)
-								axios.get(`https://onlydevcity.herokuapp.com/api/asupanghea?apikey=${onlydev}`)
-								.then(async(res) => {
-									aruga.sendFileFromUrl(from, res.data.result.url, 'ghea.mp4', 'nihh asupan Ghea Naila', id)
-									.catch(() => {
-										aruga.reply(from, 'Server api sedang error', id)
-									})
-								})
-								.catch(err => {
-									console.log(err)
-									aruga.reply(from, 'Lagi error', id)
-								})
+								await aruga.sendFileFromUrl(from, `https://dapuhy-api.herokuapp.com/api/asupan/asupanghea?apikey=${dapuhyapi}`, 'ghea.mp4', '', id)
 								break
-								case prefix+'jessicajane':
+							/*	case prefix+'jessicajane':
 								case prefix+'jessica':
 								case prefix+'jane':
 								aruga.reply(from, mess.wait, id)
@@ -2925,7 +2903,7 @@ break
 									console.log(err)
 									aruga.reply(from, 'lagi error', id)
 								})
-								break
+								break*/
 case prefix+'bioskop':
 			if (args.length == 0) return aruga.reply(from, `Fitur untuk mencari bioskop yang ada dikota Kalian\nGunakan ${prefix}bioskop nama kota\nContoh: ${prefix}bioskop Pontianak`, id)
 			const namabis = body.slice(9)
@@ -3513,17 +3491,7 @@ case prefix+'ytsearch':
 		break
 	 case prefix+'chika':
     await aruga.reply(from, `media sedang dikirim , tunggu sampe10-20 detik`, id)
-    fetch('https://raw.githubusercontent.com/AlvioAdjiJanuar/chika/main/chika.txt')
-    .then(res => res.text())
-        .then(body => {
-    let chika = body.split('\n')
-    let chikax = chika[Math.floor(Math.random() * chika.length)]
-    aruga.sendFileFromUrl(from, `https://piyobot.000webhostapp.com/${chikax}.mp4`, 'chika.mp4', 'Nih asu', id)
-    .then(() => console.log('Success sending Video'))
-        })
-        .catch(() => {
-            aruga.reply(from, 'Ada yang Error!', id)
-        })
+	await aruga.sendFileFromUrlFrom(from, `https://pencarikode.xyz/api/chika?apikey=${paiskey}`, 'chika.mp4', '', id)
     break
 	/*
 	case prefix+'tomp3':
@@ -4350,15 +4318,47 @@ console.log(err)
                         //console.log("os >>>", err);
                     })
                     break
+			case prefix+'play3':
+			if (args.length == 0) return aruga.reply(from, `what are u looking for?`, id)
+			const linuxsc = body.slice(7)
+			fetchJson(`http://docs-jojo.herokuapp.com/api/yt-search?q=${linuxsc}`)
+            .then(async (res) => {
+				console.log(color(`Nickname : ${pushname}\nNomor : ${serial.replace('@c.us', '')}\nJudul: ${res.result.result[0].title}\nDurasi: ${res.result.result[0].duration} detik`, 'aqua'))
+				const thumbsd3 = res.result.result[0].thumbnails[0].url
+				const thumbhd3 = res.result.result[0].thumbnails[1].url
+			if (thumbhd3 == 0 || thumbhd3 == undefined) {
+				var thumbnih3 = thumbsd3
+			} else {
+				var thumbnih3 = thumbhd3
+			}
+				await aruga.sendFileFromUrl(from, thumbnih3, 'thumb.jpg', `「 *PLAY* 」\n\n*Title:* ${res.result.result[0].title}\n*Duration:* ${res.result.result[0].duration} detik\n*Views:* ${res.result.result[0].viewCount.short}\n*Uploaded:* ${res.result.result[0].publishedTime}\n*Channel:* ${res.result.result[0].channel.name}\n*Url:* ${res.result.result[0].link}\n\n*_Waitt, lagi ngirim Audionyaa_*`, id)
+				rugaapi.playlinux(linuxsc)
+				if (res.status == false) return aruga.reply(from, res.message, id)
+				aruga.sendFileFromUrl(from, res.url, 'song.mp3', '', id)
+				.catch(err => {
+					console.log(err)
+					aruga.reply(from, err.message, id)
+				})
+			})
+			break
             case prefix+'play'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
-           /*axios.get(`http://docs-jojo.herokuapp.com/api/yt-search?q=${body.slice(6)}`)*/
-			fetchJson(`https://api.zeks.xyz/api/yts?q=${body.slice(6)}&apikey=${apikeyvinz}`)
+           fetchJson(`http://docs-jojo.herokuapp.com/api/yt-search?q=${body.slice(6)}`)
+			//fetchJson(`https://api.zeks.xyz/api/yts?q=${body.slice(6)}&apikey=${apikeyvinz}`)
             .then(async (res) => {
-				console.log(color(`Nickname : ${pushname}\nNomor : ${serial.replace('@c.us', '')}\nJudul: ${res.result[0].video.title}\nDurasi: ${res.result[0].video.duration} detik`, 'aqua'))
+				console.log(color(`Nickname : ${pushname}\nNomor : ${serial.replace('@c.us', '')}\nJudul: ${res.result.result[0].title}\nDurasi: ${res.result.result[0].duration} detik`, 'aqua'))
+				const thumbsd = res.result.result[0].thumbnails[0].url
+				const thumbhd = res.result.result[0].thumbnails[1].url
+			if (thumbhd == 0 || thumbhd == undefined) {
+				var thumbnih = thumbsd
+			} else {
+				var thumbnih = thumbhd
+			}
+				//console.log(color(`Nickname : ${pushname}\nNomor : ${serial.replace('@c.us', '')}\nJudul: ${res.result[0].video.title}\nDurasi: ${res.result[0].video.duration} detik`, 'aqua'))
                  /*await aruga.sendFileFromUrl(from, res.data.result.result[0].thumbnails[0].url, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result.result[0].title}\nDurasi: ${res.data.result.result[0].duration} detik\nViews: ${res.data.result.result[0].viewCount.short}\nUploaded: ${res.data.result.result[0].publishedTime}\nChannel: ${res.data.result.result[0].channel.name}\n\n*_Wait, lagi ngirim Audionya_*`, id)*/
-				 await aruga.sendFileFromUrl(from, res.result[0].video.thumbnail_src, 'thumb.jpg', `「 *PLAY* 」\n\n*Title:* ${res.result[0].video.title}\n*Duration:* ${res.result[0].video.duration} detik\n*Views:* ${res.result[0].video.views}\n*Uploaded:* ${res.result[0].video.upload_date}\n*Channel:* ${res.result[0].uploader.username}\n*Verified Channel:* ${res.result[0].uploader.verified}\n*Url:* ${res.result[0].video.url}\n\n*_Waitt, lagi ngirim Audionyaa_*`, id) 
-				 rugaapi.ymp3(`https://youtu.be/${res.result[0].video.id}`)
+				 //await aruga.sendFileFromUrl(from, res.result[0].video.thumbnail_src, 'thumb.jpg', `「 *PLAY* 」\n\n*Title:* ${res.result[0].video.title}\n*Duration:* ${res.result[0].video.duration} detik\n*Views:* ${res.result[0].video.views}\n*Uploaded:* ${res.result[0].video.upload_date}\n*Channel:* ${res.result[0].uploader.username}\n*Verified Channel:* ${res.result[0].uploader.verified}\n*Url:* ${res.result[0].video.url}\n\n*_Waitt, lagi ngirim Audionyaa_*`, id)
+				await aruga.sendFileFromUrl(from, thumbnih, 'thumb.jpg', `「 *PLAY* 」\n\n*Title:* ${res.result.result[0].title}\n*Duration:* ${res.result.result[0].duration} detik\n*Views:* ${res.result.result[0].viewCount.short}\n*Uploaded:* ${res.result.result[0].publishedTime}\n*Channel:* ${res.result.result[0].channel.name}\n*Url:* ${res.result.result[0].link}\n\n*_Waitt, lagi ngirim Audionyaa_*`, id)
+				 rugaapi.ymp3(`https://youtu.be/${res.result.result[0].id}`)
                 .then(async(res) => {
 				if (res.status == false) return aruga.reply(from, res.result, id)
 				const playlink = res.result
@@ -4411,12 +4411,22 @@ console.log(err)
            case prefix+'play2'://silahkan kalian custom sendiri jika ada yang ingin diubah
            if (args.length == 0) return aruga.reply(from, `Untuk mencari lagu dari youtube\n\nPenggunaan: ${prefix}play judul lagu`, id)
            /*axios.get(`http://docs-jojo.herokuapp.com/api/yt-search?q=${body.slice(7)}`)*/
-			fetchJson(`https://api.zeks.xyz/api/yts?q=${body.slice(7)}&apikey=${apikeyvinz}`)
+			fetchJson(`http://docs-jojo.herokuapp.com/api/yt-search?q=${body.slice(6)}`)
+			//fetchJson(`https://api.zeks.xyz/api/yts?q=${body.slice(6)}&apikey=${apikeyvinz}`)
             .then(async (res) => {
-				console.log(color(`Nickname : ${pushname}\nNomor : ${serial.replace('@c.us', '')}\nJudul: ${res.result[0].video.title}\nDurasi: ${res.result[0].video.duration} detik`, 'aqua'))
+				console.log(color(`Nickname : ${pushname}\nNomor : ${serial.replace('@c.us', '')}\nJudul: ${res.result.result[0].title}\nDurasi: ${res.result.result[0].duration} detik`, 'aqua'))
+				const thumbsd2 = res.result.result[0].thumbnails[0].url
+				const thumbhd2 = res.result.result[0].thumbnails[1].url
+			if (thumbhd2 == 0 || thumbhd2 == undefined) {
+				var thumbnih2 = thumbsd2
+			} else {
+				var thumbnih2 = thumbhd2
+			}
+				//console.log(color(`Nickname : ${pushname}\nNomor : ${serial.replace('@c.us', '')}\nJudul: ${res.result[0].video.title}\nDurasi: ${res.result[0].video.duration} detik`, 'aqua'))
                  /*await aruga.sendFileFromUrl(from, res.data.result.result[0].thumbnails[0].url, ``, `「 *PLAY* 」\n\nJudul: ${res.data.result.result[0].title}\nDurasi: ${res.data.result.result[0].duration} detik\nViews: ${res.data.result.result[0].viewCount.short}\nUploaded: ${res.data.result.result[0].publishedTime}\nChannel: ${res.data.result.result[0].channel.name}\n\n*_Wait, lagi ngirim Audionya_*`, id)*/
-				 await aruga.sendFileFromUrl(from, res.result[0].video.thumbnail_src, 'thumb.jpg', `「 *PLAY* 」\n\n*Title:* ${res.result[0].video.title}\n*Duration:* ${res.result[0].video.duration} detik\n*Views:* ${res.result[0].video.views}\n*Uploaded:* ${res.result[0].video.upload_date}\n*Channel:* ${res.result[0].uploader.username}\n*Verified Channel:* ${res.result[0].uploader.verified}\n*Url:* ${res.result[0].video.url}\n\n*_Waitt, lagi ngirim Videonyaa_*`, id) 
-				 rugaapi.ymp4(`https://youtu.be/${res.result[0].video.id}`)
+				 //await aruga.sendFileFromUrl(from, res.result[0].video.thumbnail_src, 'thumb.jpg', `「 *PLAY* 」\n\n*Title:* ${res.result[0].video.title}\n*Duration:* ${res.result[0].video.duration} detik\n*Views:* ${res.result[0].video.views}\n*Uploaded:* ${res.result[0].video.upload_date}\n*Channel:* ${res.result[0].uploader.username}\n*Verified Channel:* ${res.result[0].uploader.verified}\n*Url:* ${res.result[0].video.url}\n\n*_Waitt, lagi ngirim Audionyaa_*`, id)
+				await aruga.sendFileFromUrl(from, thumbnih2, 'thumb.jpg', `「 *PLAY* 」\n\n*Title:* ${res.result.result[0].title}\n*Duration:* ${res.result.result[0].duration} detik\n*Views:* ${res.result.result[0].viewCount.short}\n*Uploaded:* ${res.result.result[0].publishedTime}\n*Channel:* ${res.result.result[0].channel.name}\n*Url:* ${res.result.result[0].link}\n\n*_Waitt, lagi ngirim Audionyaa_*`, id)
+				 rugaapi.ymp4(`https://youtu.be/${res.result.result[0].id}`)
                 .then(async(res) => {
 				var playlinks = await axios.get(`https://urbaee-xyz.herokuapp.com/api/short/tiny?url=${res.dl_link}&apikey=Urbaeexyz`)
 				var linkplay = playlinks.data.result.link
